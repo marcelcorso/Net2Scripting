@@ -4,40 +4,48 @@ import time
 import os
 import json
 from google.cloud import pubsub_v1
-from Net2Scripting import init_logging
-from Net2Scripting.net2xs import Net2XS
-from Net2Scripting.pylog4net import Log4Net
 
 # Operator id 0 is System Engineer
-OPERATOR_ID = 0
+OPERATOR_ID = 0 
 # Default Net2 password
-OPERATOR_PWD = "net2"
+OPERATOR_PWD = os.environ['OPERATOR_PWD'] 
 # When running on the machine where Net2 is installed
-NET2_SERVER = "localhost"
+NET2_SERVER = os.environ['NET2_SERVER']
 
 GOOGLE_CLOUD_PROJECT = "hk2019-project-3"
 PUBSUB_TOPIC="porteiro"
 PUBSUB_SUBSCRIPTION="porteiro_subscription"
 
+
 def handle(message):
+    print("payload %s" % message.data)
 
     # parse json
     msg = json.loads(message.data)
 
-    print("payload %s" % message.data)
+    if "first_name" not in msg:
+        return
 
-    # find user by name
-    user_id = net2.get_user_id_by_name((msg.first_name, msg.last_name))
-    print("Found user id %d" % (user_id))
+    from Net2Scripting import init_logging
+    from Net2Scripting.net2xs import Net2XS
+    from Net2Scripting.pylog4net import Log4Net
+    with Net2XS(NET2_SERVER) as net2:
+        net2.authenticate(OPERATOR_ID, OPERATOR_PWD)
+        # find user by name
+        user_id = net2.get_user_id_by_name((msg.first_name, msg.last_name))
+        print("Found user id %d" % (user_id))
 
-    # Found a valid user id
-    if user_id >= 0:
-        # TODO check if user can open door
-        open_door(door)
-    
+        # Found a valid user id
+        if user_id >= 0:
+            # TODO check if user can open door
+            print("open_door(%s)" % (msg.door))
+        
     message.ack()
 
-def open_door():
+def open_door(door):
+    from Net2Scripting import init_logging
+    from Net2Scripting.net2xs import Net2XS
+    from Net2Scripting.pylog4net import Log4Net
     with Net2XS(NET2_SERVER) as net2:
         # Authenticate
         net2.authenticate(OPERATOR_ID, OPERATOR_PWD)
