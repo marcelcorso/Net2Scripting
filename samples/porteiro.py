@@ -33,13 +33,13 @@ def handle(message):
     with Net2XS(NET2_SERVER) as net2:
         net2.authenticate(OPERATOR_ID, OPERATOR_PWD)
         # find user by name
-        user_id = net2.get_user_id_by_name((msg.first_name, msg.last_name))
+        user_id = net2.get_user_id_by_name((msg["first_name"], msg["last_name"]))
         print("Found user id %d" % (user_id))
 
         # Found a valid user id
         if user_id >= 0:
             # TODO check if user can open door
-            print("open_door(%s)" % (msg.door))
+            open_door(msg["door"])
         
     message.ack()
 
@@ -53,20 +53,19 @@ def open_door(door):
 
         if not net2.hold_door_open(door):
             print(
-                "Failed to hold door %d open: %s." %
+                "Failed to hold door %s open: %s." %
                 (door, net2.last_error_message))
         else:
-            print("Set door %d open." % (door))
+            print("Set door %s open." % (door))
 
-        print("Now all doors are open...")
         time.sleep(3)
 
         if not net2.close_door(door):
             print(
-                "Failed to close door %d: %s." %
+                "Failed to close door %s: %s." %
                 (door, net2.last_error_message))
         else:
-            print("Set door %d closed." % (door))
+            print("Set door %s closed." % (door))
 
 if __name__ == "__main__":
 
