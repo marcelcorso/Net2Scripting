@@ -11,7 +11,7 @@ from Net2Scripting.pylog4net import Log4Net
 # Operator id 0 is System Engineer
 OPERATOR_ID = 0
 # Default Net2 password
-OPERATOR_PWD = "net2"
+OPERATOR_PWD = "12345"
 # When running on the machine where Net2 is installed
 NET2_SERVER = "localhost"
 
@@ -24,18 +24,20 @@ def handle(message):
     # parse json
     msg = json.loads(message.data)
 
-    # find user by name
-    user_id = net2.get_user_id_by_name((FIRST_NAME, SUR_NAME))
-    print("Found user id %d" % (user_id))
+    with Net2XS(NET2_SERVER) as net2:
+        net2.authenticate(OPERATOR_ID, OPERATOR_PWD)
+        # find user by name
+        user_id = net2.get_user_id_by_name((msg.first_name, msg.last_name))
+        print("Found user id %d" % (user_id))
 
-    # Found a valid user id
-    if user_id >= 0:
-        # TODO check if user can open door
-        open_door(door)
-    
+        # Found a valid user id
+        if user_id >= 0:
+            # TODO check if user can open door
+            print("open_door(%s)" % (msg.door))
+        
     message.ack()
 
-def open_door():
+def open_door(door):
     with Net2XS(NET2_SERVER) as net2:
         # Authenticate
         net2.authenticate(OPERATOR_ID, OPERATOR_PWD)
