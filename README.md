@@ -8,6 +8,8 @@ pipenv --python /usr/local/bin/python3
 pipenv shell
 
 export GOOGLE_APPLICATION_CREDENTIALS=/Users/marcel/tmp/google-cloud-porteiro.json
+// on windows:
+set GOOGLE_APPLICATION_CREDENTIALS=/Users/marcel/tmp/google-cloud-porteiro.json
 
 # install the deps
 pip install -r requirements.txt

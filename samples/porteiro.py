@@ -59,6 +59,10 @@ def open_door():
 
 if __name__ == "__main__":
 
+    import os
+    print(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+
+
     subscriber = pubsub_v1.SubscriberClient()
     topic_name = 'projects/{project_id}/topics/{topic}'.format(
         project_id=GOOGLE_CLOUD_PROJECT,
