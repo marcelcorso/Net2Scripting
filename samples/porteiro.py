@@ -24,8 +24,10 @@ def handle(message):
     # parse json
     msg = json.loads(message.data)
 
+    print("payload %s" % message.data)
+
     # find user by name
-    user_id = net2.get_user_id_by_name((FIRST_NAME, SUR_NAME))
+    user_id = net2.get_user_id_by_name((msg.first_name, msg.last_name))
     print("Found user id %d" % (user_id))
 
     # Found a valid user id
