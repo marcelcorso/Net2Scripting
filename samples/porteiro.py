@@ -4,9 +4,9 @@ import time
 import os
 import json
 from google.cloud import pubsub_v1
-# from Net2Scripting import init_logging
-# from Net2Scripting.net2xs import Net2XS
-# from Net2Scripting.pylog4net import Log4Net
+from Net2Scripting import init_logging
+from Net2Scripting.net2xs import Net2XS
+from Net2Scripting.pylog4net import Log4Net
 
 # Operator id 0 is System Engineer
 OPERATOR_ID = 0
@@ -72,8 +72,16 @@ if __name__ == "__main__":
         project_id=GOOGLE_CLOUD_PROJECT,
         sub='porteiro-subscription',
     )
-    subscriber.create_subscription(
-        name=subscription_name, topic=topic_name)
 
     future = subscriber.subscribe(subscription_name, handle)
 
+
+    import http.server
+    import socketserver
+
+    PORT = 8080
+    Handler = http.server.SimpleHTTPRequestHandler
+
+    with socketserver.TCPServer(("", PORT), Handler) as httpd:
+        print("serving at port", PORT)
+        httpd.serve_forever()
