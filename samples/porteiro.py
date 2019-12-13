@@ -24,6 +24,7 @@ def handle(message):
     msg = json.loads(message.data)
 
     if "first_name" not in msg:
+        message.ack()
         return
 
     from Net2Scripting import init_logging
