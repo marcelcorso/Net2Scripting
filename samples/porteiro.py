@@ -1,3 +1,5 @@
+# export GOOGLE_APPLICATION_CREDENTIALS=/Users/marcel/tmp/google-cloud-porteiro.json
+
 import time
 import os
 import json
