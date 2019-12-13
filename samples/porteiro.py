@@ -14,6 +14,8 @@ OPERATOR_PWD = "net2"
 NET2_SERVER = "localhost"
 
 GOOGLE_CLOUD_PROJECT = "hk2019-project-3"
+PUBSUB_TOPIC="porteiro"
+PUBSUB_SUBSCRIPTION="porteiro_subscription"
 
 def handle(message):
 
@@ -27,19 +29,31 @@ def handle(message):
     # Found a valid user id
     if user_id >= 0:
         # TODO check if user can open door
-
-        with Net2XS(NET2_SERVER) as net2:
-            # Authenticate
-            net2.authenticate(OPERATOR_ID, OPERATOR_PWD)
-
-            if not net2.hold_door_open(door):
-                print(
-                    "Failed to hold door %d open: %s." %
-                    (door, net2.last_error_message))
-            else:
-                print("Set door %d open." % (door))
-
+        open_door(door)
+    
     message.ack()
+
+def open_door():
+    with Net2XS(NET2_SERVER) as net2:
+        # Authenticate
+        net2.authenticate(OPERATOR_ID, OPERATOR_PWD)
+
+        if not net2.hold_door_open(door):
+            print(
+                "Failed to hold door %d open: %s." %
+                (door, net2.last_error_message))
+        else:
+            print("Set door %d open." % (door))
+
+        print("Now all doors are open...")
+        time.sleep(3)
+
+        if not net2.close_door(door):
+            print(
+                "Failed to close door %d: %s." %
+                (door, net2.last_error_message))
+        else:
+            print("Set door %d closed." % (door))
 
 if __name__ == "__main__":
 
