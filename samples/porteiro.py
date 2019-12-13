@@ -4,9 +4,9 @@ import time
 import os
 import json
 from google.cloud import pubsub_v1
-from Net2Scripting import init_logging
-from Net2Scripting.net2xs import Net2XS
-from Net2Scripting.pylog4net import Log4Net
+# from Net2Scripting import init_logging
+# from Net2Scripting.net2xs import Net2XS
+# from Net2Scripting.pylog4net import Log4Net
 
 # Operator id 0 is System Engineer
 OPERATOR_ID = 0
