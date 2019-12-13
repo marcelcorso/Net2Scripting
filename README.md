@@ -11,6 +11,10 @@ export GOOGLE_APPLICATION_CREDENTIALS=/Users/marcel/tmp/google-cloud-porteiro.js
 // on windows:
 set GOOGLE_APPLICATION_CREDENTIALS=/Users/marcel/tmp/google-cloud-porteiro.json
 
+export NET2_SERVER="localhost"
+export OPERATOR_PWD="net2"
+
+
 # install the deps
 pip install -r requirements.txt
 
